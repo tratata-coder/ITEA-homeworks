@@ -77,15 +77,8 @@ const arr = container.querySelectorAll('.tab')
 modules.forEach( function ( module ) {
 
 	module.onclick = function(){
-		let numOfBtn = module.getAttribute('data-tab');
-
-		for(let i = 0; i < arr.length; i++){
-			let numOfTab = arr[i].dataset.tab;
-			if( numOfBtn === numOfTab){
-				arr[i].classList.add('active');
-				break;
-			}	
-		}
+		let numOfBtn = arr[module.dataset.tab-1];
+		numOfBtn.classList.add('active');
 	}
 
 	module.onkeydown = function ( module ){
