@@ -24,33 +24,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	const next = document.getElementById('NextSilde');
 	const prev = document.getElementById('PrevSilde');
 
-	
 	window.addEventListener('load', function(){
 		createImage();
 	});
+
+	prev.addEventListener('click', RenderImage, false);
+	next.addEventListener('click', RenderImage, false);
+
+	function RenderImage(event){
+		let nameOfBtn = event.target.id;
+		if(nameOfBtn === 'NextSlide'){
+			NextSlide()
+		}else{
+			PrevSlide()
+		}
+		removeImg();
+		createImage();
+	}
 
 	let NextSlide = function(){
 		currentPosition++;
 		if(currentPosition === OurSliderImages.length){
 			currentPosition = 0;
 		}
-		RenderImage();
+		return currentPosition;
 	}
-	next.addEventListener('click', NextSlide, false);
 
 	let PrevSlide = function(){
 		currentPosition--;
 		if(currentPosition === -1){
 			currentPosition = OurSliderImages.length - 1;
 		}
-		RenderImage();
-	}
-	prev.addEventListener('click', PrevSlide, false);
-
-	function RenderImage(){
-		let img = slider.querySelector('img');
-		slider.removeChild(img);
-		createImage();
+		return currentPosition;
 	}
 
 	function createImage(){
@@ -59,4 +64,46 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		img.style = 'width: 300px';
 		slider.appendChild(img);
 	}
+
+	function removeImg(){
+		let img = slider.querySelector('img');
+		slider.removeChild(img);
+	}
+
+	// 	Я СНАЧАЛА ТАК РЕШИЛА. НО ЭТО БЫЛО-БЫ НЕПРАВИЛЬНО?
+
+	// window.addEventListener('load', function(){
+	// 	createImage();
+	// });
+
+	// let NextSlide = function(){
+	// 	currentPosition++;
+	// 	if(currentPosition === OurSliderImages.length){
+	// 		currentPosition = 0;
+	// 	}
+	// 	RenderImage();
+	// }
+	// next.addEventListener('click', NextSlide, false);
+
+	// let PrevSlide = function(){
+	// 	currentPosition--;
+	// 	if(currentPosition === -1){
+	// 		currentPosition = OurSliderImages.length - 1;
+	// 	}
+	// 	RenderImage();
+	// }
+	// prev.addEventListener('click', PrevSlide, false);
+
+	// function RenderImage(){
+	// 	let img = slider.querySelector('img');
+	// 	slider.removeChild(img);
+	// 	createImage();
+	// }
+
+	// function createImage(){
+	// 	let img = document.createElement('img');
+	// 	img.src = OurSliderImages[currentPosition];
+	// 	img.style = 'width: 300px';
+	// 	slider.appendChild(img);
+	// }
 });
