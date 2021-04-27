@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Lesson 4 :: Task 5 </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <link rel="stylesheet" href="css/normalize.css" /> -->
+	<link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+
+                <form id="form">
+
+                    <div class="form-group">
+                        <label for="name">Имя пользователя</label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="water">Количество выпитых стаканов воды</label>
+                        <input type="number" class="form-control" name="water" id="water">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thanks">Спасибо за воду</label>
+                        <input type="text" class="form-control" name="thanks"  id="thanks">
+                    </div>
+                    
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="agree">
+                            <span>
+                                Принимаю соглашение
+                            </span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+    
+
+
+<script>
+
+    const name = document.getElementById('name');
+    name.setAttribute('minlength', '2');
+    name.required = true;
+    name.addEventListener('input',  function (){
+        if(name.validity.tooShort){
+            name.setCustomValidity('Как тебя зовут?')
+        }else {
+            name.setCustomValidity('');
+        }
+    })
+    
+    const email = document.getElementById('email');
+    email.required = true;
+    email.setAttribute('minlength', '3');
+    email.addEventListener('input',  function (){
+        if(email.validity.tooShort){
+            email.setCustomValidity('Без этого поля мы не сможем отправить тебе счет!')
+        }else {
+            email.setCustomValidity('');
+        }
+    })
+
+    const password = document.getElementById('password');
+    password.required = true;
+    password.setAttribute('minlength', '8');
+    password.setAttribute('maxlength', '16');
+    password.addEventListener('input',  function (){
+        if(password.value.length === 0){
+            password.setCustomValidity("Я никому не скажу, напиши минимум 8 символов")
+        }else {
+            password.setCustomValidity('');
+        }
+    })
+
+    const water = document.getElementById('water');
+    water.required = true;
+    water.addEventListener('input', function(e){
+        if(+water.value <= 0){
+            water.setCustomValidity("Ну хоть покушай немного... Яблочки вкусные") 
+        }else{
+            water.setCustomValidity('');
+        }
+    });
+
+    const thanks = document.getElementById('thanks')
+    thanks.required = true;
+    thanks.addEventListener('input',  function (){
+        if(thanks.value !== "спасибо"){
+            thanks.setCustomValidity("Нужно сказать спасибо!")
+        }else {
+            thanks.setCustomValidity('');
+        }
+    })
+
+
+    const forms = document.getElementById('form');
+    const Validate = document.createElement('button');
+    Validate.innerText = 'Validate'
+    forms.appendChild(Validate);
+
+    const checkBox = forms.elements.agree;
+    checkBox.required = true;
+
+    Validate.addEventListener('click', function (event) {
+            if(checkBox.checked === false){
+                checkBox.setCustomValidity("Не можем продолжить без этого пункта :(")
+            }else {
+                checkBox.setCustomValidity('');
+            }
+        forms.checkValidity()
+        forms.reportValidity()            
+    });
+
+
+
+    
+
+
+    /*
+
+        Документация:
+        
+        https://developer.mozilla.org/ru/docs/HTML/HTML5/Constraint_validation
+        
+        form.checkValidity() > Проверка всех полей формы на валидость
+        form.reportValidity() > Проверяет все поля на валидность и выводит возле каждого из не прошедшего валидацию
+            сообщение с ошибкой
+
+        formElement.validity > Объект с параметрами валидности поля 
+        formElement.setCustomValidity(message) > Метод который задаст validity.valid = false, и при попытке отправки
+            сообщения выведет message в браузерный попал
+
+        Классы для стилизации состояния элемента
+        input:valid{}
+        input:invalid{}
+
+        Задание:
+        Используя браузерное API для валидации форм реализовать валидацию следующей формы:
+
+        - Имя пользователя: type:text -> validation: required; minlength = 2;  
+            Если пустое вывести сообщение: "Как тебя зовут?!"
+        - Email: type: email -> validation: required; minlength = 3; validEmail;
+            Если эмейл не валидный вывести сообщение "Без этого поля мы не сможем отправить тебе счет!"
+        - Пароль: type: password -> validation: required; minlength = 8; maxlength=16;
+            Если пустой вывести сообщение: "Я никому не скажу, напиши минимум 8 символов";
+        - Количество выпитых стаканов воды: type: number -> validation: required; minlength = 1; validNumber;
+            Если количество 0 вывести эррор с сообщением "Ну хоть покушай немного... Яблочки вкусные"
+        - Спасибо за воду: type: text -> validation: required; 
+            Если текст !== "спасибо" вывести эррор с сообщением "Нужно сказать спасибо!" используя setCustomValidity();
+        - Принимаю соглашение: type: checkbox -> validation: required;
+            Если не выбран, вывести эррор с сообщением: "Не можем продолжить без этого пункта :("
+
+        Внизу две кнопки:
+
+        1) Обычный submit который отправит форму, если она валидна.
+        2) Кнопка Validate(Проверить) которая запускает методы:
+            - yourForm.checkValidity: и выводит на страницу сообщение с результатом проверки
+            - yourForm.reportValidity: вызывает проверку всех правил и вывод сообщения с ошибкой, если такая есть
+
+    */
+
+</script>
+</body>
+</html>

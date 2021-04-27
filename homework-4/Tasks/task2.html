@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title> Lesson 4 :: Task 2 </title>
+
+	<!-- <link rel="stylesheet" href="css/normalize.css" /> -->
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+	<div class="Templating">
+		<form>
+			<input type="range" id="width_input" min="10" max="500" step="10" />
+			<input type="range" id="height_input" min="10" max="500" step="10" />
+			<input type="range" id="border_input" min="10" max="500" step="10" />
+			<input type="range" id="padding_input" min="10" max="500" step="10" />
+			<input type="color" id="color_input" min="10" max="500" step="10" />
+		</form>
+
+		<div class="TemplatingResult">
+			<div id="result" class="result"></div>
+		</div>
+
+		<div id="popup">
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+			<div class="circle"></div>
+		</div>
+
+
+	</div>
+	<script>
+		/*
+		Задание 2.
+
+		Сделать шиблонизатор элемента result по:
+		- Ширине input type=range
+		- Высоте input type=range
+		- Скругление углов input type=range
+		- Padding input type=range
+		- Цвету  input type=color
+
+		Список CSS свойств: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Properties_Reference
+
+
+		Для выбора цвета необходимо сделать вот такой интерфейс:
+		https://s3.envato.com/files/230412754/screenshots/1.png
+
+		При клике на color_input стандартный инпут цвета не должен появлятся, а должно открыться окно 
+		как на макете выше. 
+		Дальше по клику на круг с цветом, должен изменится цвет блока result, а также цвет внутри 
+		самого элемента input.
+
+		Для рандомайза цвета, можно использовать функцию рандома цвета из первых занятий.
+
+	*/
+
+		document.addEventListener('DOMContentLoaded', function () {
+
+			const InputWidth = document.getElementById('width_input');
+			const InputHeight = document.getElementById('height_input');
+			const InputBorder = document.getElementById('border_input');
+			const InputPadding = document.getElementById('padding_input');
+			const InputColor = document.getElementById('color_input');
+			const result = document.getElementById('result');
+			const plase = document.querySelector('.TemplatingResult')
+
+			InputWidth.addEventListener('input', function (event) {
+				result.style.width = event.target.value + 'px';
+			});
+
+			InputHeight.addEventListener('input', function (event) {
+				result.style.height = event.target.value + 'px';
+			});
+
+			InputBorder.addEventListener('input', function (event) {
+				result.style.border = event.target.value / 20 + 'px' + ' solid' + ' green';
+			});
+
+			InputPadding.addEventListener('input', function (event) {
+				result.style.padding = event.target.value / 10 + 'px';
+			});
+
+			function randomColor() {
+				let a = Math.floor((Math.random() * 255) + 1);
+				a = a.toString(16)
+				if(a.length === 1){
+					a = '0' + a;
+				}
+				return a;
+			}
+
+			InputColor.addEventListener('click', function (event) {
+				InputColor.disabled = true;
+				event.preventDefault();
+				createSpans();
+			});
+
+			function createSpans() {
+				let divForSpans = document.createElement('div');
+				divForSpans.style.cssText = 'width: 310px; background: aqua; margin: auto; padding:15px; border-radius: 5%; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%);'
+				plase.appendChild(divForSpans);
+				let h3 = document.createElement('h3');
+				h3.innerHTML = 'Выберите цвет';
+				h3.style.cssText = 'margin: 10px';
+				divForSpans.appendChild(h3);
+
+				for (let i = 1; i <= 20; i++) {
+					let span = document.createElement('span');
+					span.style.cssText =
+						'width:50px; height:50px; display: inline-block; margin: 5px; border-radius: 50%; border: 1px solid black';
+					span.style.background = `#${randomColor()}${randomColor()}${randomColor()}`;  // ТАК КАК ТУТ ЦВЕТ САМ КОНВЕРТИРУЕТСЯ В RGB, ЗАДАТЬ ТАКОЙ ЖЕ ЦВЕТ ИНПУТУ Я НЕ СМОГЛА
+					divForSpans.appendChild(span);
+					
+					span.addEventListener('click', function (event) {
+						result.style.background = span.style.background;
+						plase.removeChild(divForSpans);
+						InputColor.value = `#${randomColor()}${randomColor()}${randomColor()}`;
+						InputColor.disabled = false;
+					});
+				}
+			}
+		}); 
+	</script>
+</body>
+
+</html>

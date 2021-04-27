@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title> Lesson 4 :: Task 1 </title>
+
+	<!-- <link rel="stylesheet" href="css/normalize.css" /> -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+	<form id="ValidationForm" class="form">
+		<input class="form__input" type="text" name="login" placeholder="Ваш логин" />
+		<input class="form__input" type="password" name="password" placeholder="Ваш пароль" />
+		<input class="form__input" type="password" name="password_confirm" placeholder="Повторите пароль" />
+		<label for="agree">
+			<span>Вы согласны с лицензионым соглашением.</span>
+			<input type="checkbox" id="agree" />
+		</label>
+		<button class="form__button" type="submit" id="submit" disabled> Отправить </button>
+	</form>
+
+<script>
+		const forms = document.getElementById('ValidationForm');
+		const login = forms.elements.login;
+		const password = forms.elements.password;
+		const passwordConfirm = forms.elements.password_confirm;
+		const checkBox = document.getElementById('agree');
+		const btn = document.getElementById('submit');
+		const elements = document.querySelectorAll('.form__input');
+
+
+        		elements.forEach( function( input ){
+					input.addEventListener('change', function(e){
+						if(passwordConfirm.value !== password.value){
+							passwordConfirm.classList.add('invalid')
+						}else{
+							passwordConfirm.classList.add('valid')
+							passwordConfirm.classList.remove('invalid')
+						}
+						
+						if (e.target.value !== ''){
+							input.classList.add('valid')
+						}else{
+							input.classList.remove('valid')
+							input.classList.add('invalid')
+						}
+					});
+            	});
+				
+				checkBox.addEventListener('change', function () {
+					 this.checked ? btn.disabled = false : btn.disabled = true;
+				})
+	/*
+		Задание:
+
+			Использую кастомную валидацию (Не используя Constraint Validation API) 
+			сделать валидацию формы по следующим правилам:
+
+			1. Логин / Пароль не может быть пустым
+			2. Пароли должны совпадть
+			3. Пока не стоит что юзер согласен с лиц. соглашением - кнопка отправки не активна
+
+			Валидным полям нужно добавить класс valid, полям с ошибкой нужно добавить класс invalid
+	*/
+</script>
+</body>
+</html>
