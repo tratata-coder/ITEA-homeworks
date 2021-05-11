@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Classwork</title>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      /*
+        Задание:
+        1. При помощи методов разобраных на занятии, переформатировать ITEA_COURSES в массив который содержит длину строк каждого из элементов.
+        2. Используя метод Array.sort. Отфильтровать массив ITEA_COURSES по длине строк. Вывести на страницу списком
+        3. Реализация функции поиска по массиву ITEA_COURSES. Вывести на страницу инпут и кнопку по которой будет срабатывать поиск.
+      */
+
+      const ITEA_COURSES = ["Курс HTML & CSS", "JavaScript базовый курс", "JavaScript продвинутый курс",
+        "JavaScript Professional", "Angular 2.4 (базовый)", "Angular 2.4 (продвинутый)", "React.js",
+        "React Native", "Node.js", "Vue.js"
+      ];
+
+      const cursesLengs = ITEA_COURSES.map(curs => curs.length);
+      // console.log("🚀 ~ cursesLengs", cursesLengs)
+
+
+      const newArr = ITEA_COURSES.sort(function (a, b) {
+        return a.length - b.length;
+      });
+
+      const ul = document.createElement('ul')
+      document.querySelector('body').appendChild(ul)
+
+      newArr.forEach(element => {
+        let li = document.createElement('li');
+        ul.appendChild(li)
+        li.innerHTML = element;
+      });
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      document.querySelector('body').appendChild(input)
+      const button = document.createElement('button');
+      button.innerHTML = 'check';
+      document.querySelector('body').appendChild(button);
+      const span = document.createElement('span');
+      span.style.paddingLeft = '10px';
+      document.querySelector('body').appendChild(span);
+
+      button.addEventListener('click', function () {
+        let result = ITEA_COURSES.includes(input.value);
+        span.innerHTML = input.value + ':' +' ' + result;
+        input.value = '';
+      })
+
+
+      /*
+        Задание 2:
+        Написать фильтр массива по:
+        Актеру, продолжительности
+
+        Бонус:
+          Сделать графическую оболочку для программы:
+          - Селект со списком актеров
+          - Селект или инпут с продолжительностью
+          - Результат в виде списка фильмов
+        
+          <select> <input type="number" name="duration" > <button> find </button>
+      */
+
+      var stars = ['Elijah Wood', 'Ian McKellen', 'Orlando Bloom', 'Ewan McGregor', ' Liam Neeson',
+        'Natalie Portman', 'Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman'
+      ];
+      var movies = [{
+          name: "Lord of the Rigs",
+          duration: 240,
+          starring: ['Elijah Wood', 'Ian McKellen', 'Orlando Bloom']
+        },
+        {
+          name: "Star Wars: Episode I - The Phantom Menace",
+          duration: 136,
+          starring: ['Ewan McGregor', ' Liam Neeson', 'Natalie Portman']
+        },
+        {
+          name: "Fargo",
+          duration: 100,
+          starring: ['Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman']
+        },
+        {
+          name: "V for Vendetta",
+          duration: 150,
+          starring: ['Hugo Weaving', 'Natalie Portman', 'Rupert Graves']
+        }
+      ];
+
+      const resultPlase = document.getElementById('result')
+      const mySelection = document.getElementById('actors');
+
+      const startOpt = new Option('Выберите актера', null, true, true);
+      startOpt.disabled = true;
+      mySelection.appendChild(startOpt);
+
+      stars.forEach(function (item, index) {
+        let selected = false;
+        let defSelected = false;
+        let opt = new Option(item, index, selected, defSelected);
+        mySelection.appendChild(opt);
+      });
+
+      mySelection.addEventListener('change', function () {
+        let result = [];
+        movies.forEach(function (obj) {
+          obj.starring.filter(function actor(a) {
+            if (a === stars[mySelection.value]) {
+              result.push(obj.name)
+            }
+          })
+        })
+        resultPlase.innerHTML = `Фильмы с участвием: ${result}`;
+      });
+
+      const resultDuration = document.getElementById('result_duration')
+      const duration = document.getElementById('duration');
+      const find = document.getElementById('find');
+
+      find.addEventListener('click', function () {
+        let result = [];
+        movies.forEach(function (obj) {
+          if (obj.duration <= +duration.value) {
+            result.push(obj.name)
+          }
+        })
+        if (result.length === 0) {
+          result.push('не найдено')
+        }
+        resultDuration.innerHTML = `Фильмы ниже заданой длительности: ${result}`;
+      })
+    });
+  </script>
+</head>
+
+<body>
+  <select class="form__input select" id="actors"></select>
+  <div id="result"></div>
+  <input placeholder="Duration" type="number" id="duration" step="30" min="30" max="300">
+  <button id="find"> find </button>
+  <div id="result_duration"></div>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Classwork</title>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      /*
+        1. Используя интерфейс который есть на страничке, написать визуальный
+        конструктор объектов используя значение key-value, которые вводятся в
+        соответствующие поля в форме.
+
+        2. Каждый созданный объект выводить в тег code после добавления каждого
+        нового поля. Т.е мы должны визуально видеть в каком состоянии наши объекты
+        сейчас
+
+        3. По нажатию кнопки Combine Objects! два объекта должны объединиться
+        используя метод Object.assing или spread operator и вывести на страницу.
+
+        * Изменять HTML можно.
+
+      */
+      const containers = document.querySelectorAll('.assigned');
+      const combinate = document.querySelector('.resultBlock button');
+      const button1 = document.querySelector('.btn1');
+      const button2 = document.querySelector('.btn2');
+      const result = document.getElementById('result');
+      let a;
+      let b;
+
+      containers.forEach(function (container) {
+        let buttonSend = container.querySelector('button');
+        let code = container.querySelector('code');
+        let obj = {};
+
+        buttonSend.addEventListener('click', function () {
+          let key = container.querySelector('input[name=key]').value;
+          let value = container.querySelector('input[name=value]').value;
+          obj[key] = value
+          objHtml (obj, code)
+          buttonSend === button1 ? a = obj : b = obj;
+        })
+      })
+      
+      combinate.addEventListener('click', function () {
+        let assign = Object.assign({}, a, b);
+        objHtml (assign, result)
+      })
+
+      objHtml = (obj, tag) =>{
+        tag.innerHTML = '{'
+        for (key in obj) {
+          tag.innerHTML += '<br>' + key + ': ' + obj[key] + ','
+        }
+        tag.innerHTML += '}'
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="assigned">
+      <form class="ObjForm">
+        <input name="key" placeholder="Enter your key" />
+        <input name="value" placeholder="Enter your value" />
+        <button class="btn1" type="button">Send</button>
+      </form>
+      <div class="createResult">
+        <header>
+          Created Object
+        </header>
+        <div class="createdObj">
+          <code>
+            {
+            id:123,
+            b:'test',
+            demo:'test2'
+            }
+          </code>
+        </div>
+      </div>
+    </div>
+
+    <div class="assigned">
+      <form class="ObjForm">
+        <input name="key" placeholder="Enter your key" />
+        <input name="value" placeholder="Enter your value" />
+        <button class="btn2" type="button">Send</button>
+      </form>
+      <div class="createResult">
+        <header>
+          Created Object
+        </header>
+        <div class="createdObj">
+          <code>
+            {
+            id:123,
+            b:'test',
+            demo:'test2'
+            }
+          </code>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="resultBlock">
+    <button>Combine Objects!</button>
+    <h3> Result: </h3>
+    <div id="result"></div>
+  </div>
+
+  <script>
+
+  </script>
+  <style>
+    .wrap {
+      width: 800px;
+      display: flex;
+    }
+
+    .ObjForm,
+    .resultBlock {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      box-sizing: border-box;
+      padding: 10px 20px;
+    }
+
+    .assigned {
+      width: 600px;
+      display: flex;
+    }
+
+    .createResult header {
+      font-weight: 700;
+    }
+    .createdObj {
+      width: 200px;
+    }
+  </style>
+</body>
+
+</html>

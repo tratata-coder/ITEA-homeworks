@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Homework</title>
+</head>
+
+<body>
+    <div class="round">
+        <div id="myDIV">
+            <div class="vizible"></div>
+            <div class="invizible"></div>
+
+        </div>
+    </div>
+    <style>
+        #myDIV {
+            height: 87px;
+            width: 0px;
+            margin-left: 20px;
+            margin: 0 auto;
+        }
+
+        .vizible {
+            border: solid 1px black;
+            height: 40px;
+        }
+
+        .round {
+            height: 90px;
+            padding: 5px;
+            width: 90px;
+            border: solid 2px black;
+            border-radius: 50%;
+        }
+    </style>
+    <!--
+        Создайте счетчик секунд, который начинает отчет с 1 и заканчивается на 30,
+
+        Нужно добавить кнопки:
+        - Начать отсчет. При клике на нее запускается таймер.
+        - Остановить отсчет. При клике таймер останавливается.
+        - Обнулить отсчет. Сбрасывает счетчик на 0, таймер не останавливается.
+        - Реверс. Изменяет направление таймера, отсчет начинает идти в противоположную сторону
+
+        У счетчика есть два режима - обычный от 0 до 30 или реверсивный от 30 до 0.
+    
+        + бонус: Сделать так чтобы на каждый тик (1с/2c) менялся цвет фона. Можно на основе генератора случайного цвета с предыдущих уроков.
+        + бонус: Сделать визуализацию стрелки которая идет по кругу
+            document.getElementById("myDIV").style.transform = "rotate(7deg)";
+
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.querySelector('body');
+            const start = document.createElement('button')
+            start.innerText = 'Начать отсчет';
+            body.appendChild(start)
+            const stop = document.createElement('button')
+            stop.innerText = 'Остановить отсчет';
+            body.appendChild(stop)
+            const zero = document.createElement('button')
+            zero.innerText = 'Обнулить отсчет';
+            body.appendChild(zero)
+            const revers = document.createElement('button')
+            revers.innerText = 'Реверс';
+            body.appendChild(revers);
+            const time = document.querySelector('.invizible');
+            const btnTop = document.createElement('button')
+            btnTop.innerText = 'От 0 до 30';
+            body.appendChild(btnTop)
+            const btnDown = document.createElement('button')
+            btnDown.innerText = 'От 30 до 0';
+            body.appendChild(btnDown)
+
+
+            function randomColor() {
+                return Math.floor((Math.random() * 255) + 1);
+            };
+
+            function changeBcolor() {
+                body.style.background = `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
+            }
+
+            function seconds() {
+                let timer = null;
+                let clickOnStartCounter = 0;
+                let global_direction;
+                let i;
+
+                function clock() {
+                    if (i >= 0) {
+                        time.innerText = i;
+                        document.getElementById("myDIV").style.transform = `rotate(${i*6}deg)`;
+                        changeBcolor();
+                    } else {
+                        time.innerText = 0;
+                        document.getElementById("myDIV").style.transform = `rotate(0deg)`;
+                    }
+                }
+
+                function counter() {
+                    global_direction === 'top' ? i += 1 : i -= 1;
+                    clock()
+                }
+
+                function clear() {
+                    clearInterval(timer);
+                    clickOnStartCounter = 0;
+                }
+
+                start.addEventListener('click', function () {
+                    if (clickOnStartCounter === 0) {
+                        clickOnStartCounter = 1;
+                        timer = setInterval(
+                            function () {
+                                counter();
+                                console.log("🚀 ~ i", i)
+                                if (global_direction === 'top' && i >= 30) {
+                                    clear()
+                                    i = 0;
+                                } else if (global_direction === 'down' && i <= 0) {
+                                    clear()
+                                    global_direction = 'top'
+                                }
+                            },
+                            1000)
+                    }
+                });
+
+                stop.addEventListener('click', function () {
+                    clear();
+                })
+
+                zero.addEventListener('click', function () {
+                    i = 0;
+                    clock();
+                })
+
+                revers.addEventListener('click', function () {
+                    global_direction === 'down' ? global_direction = 'top' : global_direction = 'down';
+                })
+
+                btnDown.addEventListener('click', () => {
+                    i = 30;
+                    global_direction = 'down';
+                })
+
+                btnTop.addEventListener('click', () => {
+                    i = 0;
+                    global_direction = 'top';
+                })
+            }
+
+            seconds()
+        });
+    </script>
+</body>
+
+</html>
